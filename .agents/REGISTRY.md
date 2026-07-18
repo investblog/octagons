@@ -73,3 +73,27 @@ library; do not add TypeScript merely to satisfy the gate.
 - `prepublishOnly` runs the build, because `octagons.min.js` is gitignored (see
   `git-discipline`) yet listed in `files` — publishing without it would ship a package
   missing its own minified entry.
+
+## 2026-07-19 — published to npm
+
+- **`octagons` on npm**, MIT, released 0.1.0 → 0.1.2 the same day. The short name was
+  taken by the real library, not a placeholder: npm's disputes policy forbids publishing
+  a package merely to reserve a name.
+- **Two release workflows, deliberately.** `release.yml` is tag-triggered and publishes
+  over OIDC with provenance and no stored secret; `bootstrap-publish.yml` is manual-only
+  and uses an `NPM_TOKEN` secret. The second exists because npm has no Settings page for
+  a package that does not exist, so trusted publishing cannot be configured before the
+  first publish. See [docs/decisions/003](../docs/decisions/003-publishing-over-oidc.md).
+- **Credentials were never written locally.** The token went into GitHub's encrypted
+  secret store, entered by the user; nothing was placed in `~/.npmrc`. Writing tokens to
+  config files is refused regardless of instruction, so the workflow route was built
+  instead — which is also the better design.
+- **devDependencies added** (`eslint`, `terser`) with a lockfile. Lint and build had been
+  working only because both are installed globally on this machine; CI had neither, so
+  the gates would have been decorative. Found by writing the workflow, not by testing.
+- **GitHub topics and repo website set** for discovery — the repo had none at all.
+
+### Still open
+Trusted Publisher is not configured, so every release so far used the token path and
+carries no provenance, and the `NPM_TOKEN` secret remains in the repository. Steps are in
+`../RELEASING.md` and decisions/003; this is the last piece of the intended design.

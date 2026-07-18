@@ -53,6 +53,30 @@ Two modes: `field` (octagons at varying depth, drifting toward the viewer) and
   healthy build down to 0 fps, and the collapse was misread as a library bug that did not
   exist. Close the tabs first, then measure — the same build reads 60 fps clean.
   Automation capturing the screen also depresses the number; prefer the page's own meter.
+- **A blank canvas usually means it is asleep, not broken.** `document.hidden` is true
+  whenever the browser window is not focused, and the loop pauses by design. Check
+  `document.hidden` before debugging anything else — this looked like a rendering bug
+  twice.
+- **Measure the claim, do not reason about it.** The vignette-in-alpha defect was argued
+  from the code and confirmed by reading a single pixel: alpha 79/255 in the corner. One
+  `getImageData` call settled what a paragraph of reasoning only suggested.
+- **Do not justify an omission with an unverified mechanism.** `seed` was deliberately
+  left out of `set()` on the grounds that re-seeding "would desync the stream" — a
+  sentence that was never checked and was simply false, since `seedField()` restarts the
+  stream. A wrong reason is worse than no reason: it survives review by sounding
+  deliberate.
+
+### npm publishing — the three failures, in the order they appear
+Each one reports something other than its cause, so read this before debugging a release:
+- **`is not a legal HTTP header value`** → the token secret contains whitespace or a line
+  break. npm sends the token as an HTTP header.
+- **`EOTP` / one-time password required** → the token is not an **Automation** token, and
+  the account has 2FA. Token *type*, not delivery mechanism: a local `.npmrc` fails the
+  same way.
+- **`404 Not Found - PUT`** → not a missing package. npm masks 403 as 404: the credential
+  has no publish rights. For the OIDC path this means no trusted publisher is configured.
+  Note the log prints "Signed provenance statement … published to transparency log"
+  immediately before failing, which reads as success.
 
 ## Self-configuration (adapt and explain)
 `~/.agents` provides a minimal shared baseline. Adapting to the project is standard work:

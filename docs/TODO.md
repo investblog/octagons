@@ -18,11 +18,17 @@ exists; an item is dropped when its plan moves to `plans/done/`.
 
 ## Open
 
-- **Trusted Publisher is not configured yet**, so releases still cannot go out over
-  OIDC and carry no provenance. Steps in `../RELEASING.md`. Until it is done, the
-  `NPM_TOKEN` secret has to stay, which is the thing worth closing.
-- **Delete `bootstrap-publish.yml`** once trusted publishing works — it exists only to
-  create the package, and stops working anyway if token publishing is disallowed.
+- **Trusted Publisher is still not configured**, three releases in. 0.1.0, 0.1.1 and
+  0.1.2 all went out through the token bootstrap, so none carry provenance, every tag
+  leaves a failed `release.yml` run behind, and the `NPM_TOKEN` secret is still sitting
+  in the repository. Full steps in [decisions/003](decisions/003-publishing-over-oidc.md).
+  This is the one open item that costs something every release.
+- **Delete `bootstrap-publish.yml`** once the above works — it stops functioning anyway
+  if token publishing is disallowed.
+- **No tests, and now an API that wants them.** `seed` + `step(dt)` make the field
+  deterministic, which means a headless frame-hash test is finally possible: render N
+  frames at a fixed seed, compare a hash against a stored value. That would have caught
+  the `set({ seed })` no-op automatically.
 - **CDN eligibility.** cdnjs wants roughly 800 npm downloads/month or 200 GitHub stars;
   jsDelivr and unpkg serve from npm with no threshold and already work.
 
