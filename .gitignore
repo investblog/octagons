@@ -40,3 +40,6 @@ context/attachments/
 
 # generated build output — rebuilt by `npm run build`, never committed (git-discipline)
 octagons-lite.min.js
+
+# local agent anchor — symlink to AGENTS.md, not shipped
+CLAUDE.md

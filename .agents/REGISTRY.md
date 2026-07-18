@@ -15,9 +15,23 @@ fresh-project path ran, not migration mode.
   Consequently no `./.mcp.json` exists.
 - **Claude config:** only `./.claude/settings.json` (committed chain hooks). No
   `settings.local.json` — no project-specific permission overrides worth pinning.
-- **`./CLAUDE.md`:** a real symlink → `./AGENTS.md`, created with PowerShell
-  `New-Item -ItemType SymbolicLink`. Git Bash `ln -s` silently **copies** on this machine
-  (MSYS fallback) — do not use it for the anchor.
+- **`./CLAUDE.md`:** a symlink → `./AGENTS.md`, and it must be **relative**.
+  Two traps here, both hit in practice:
+  1. Git Bash `ln -s` silently **copies** the file on this machine (MSYS fallback) and
+     still exits 0. Do not use it for the anchor.
+  2. PowerShell `New-Item -ItemType SymbolicLink -Target "AGENTS.md"` resolves the
+     relative target against the **shell's** working directory, not the link's. Run from
+     the wrong directory it bakes in an absolute path — this project's anchor spent its
+     first commits pointing at a *different* project's `AGENTS.md`, so Claude would have
+     loaded the wrong rule set entirely. Use `cmd /c mklink CLAUDE.md AGENTS.md` with the
+     shell already inside the project: mklink stores the literal string, giving a
+     relative link that survives clones and moves.
+
+  Verify after creating, never assume: `os.path.realpath('CLAUDE.md')` must land inside
+  this project, and the file's first line must name this project.
+- **`CLAUDE.md` is gitignored** (2026-07-18, user request): it is a local agent anchor,
+  not a shipped artifact. Consequence to know: a fresh clone has no `CLAUDE.md`, so Claude
+  Code will not pick up `AGENTS.md` there until the symlink is recreated.
 - **Hook shell:** rendered as the absolute `W:\Program Files\Git\bin\bash.exe`, not bare
   `bash`, which here can resolve to the WSL launcher and fail with no distro installed.
 - **Fresh-init files:** `.gitignore` from the baseline template, plus `.gitattributes`
