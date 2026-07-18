@@ -1,0 +1,76 @@
+name: Bootstrap publish (one-time)
+
+# ONE-TIME use only, to create the package on npm so that Trusted Publishing can be
+# configured for it — npm has no package Settings page until the package exists.
+#
+# How to use:
+#   1. Create an npm token: npmjs.com → Access Tokens → Generate → **Automation**
+#      (Automation skips the OTP prompt that 2FA otherwise forces on publish).
+#   2. Repo → Settings → Secrets and variables → Actions → New repository secret,
+#      name it NPM_TOKEN and paste the value there. It is encrypted and write-only.
+#   3. Actions → "Bootstrap publish (one-time)" → Run workflow.
+#
+# AFTER IT SUCCEEDS, do both of these:
+#   - npmjs.com → octagons → Settings → Trusted Publisher → GitHub Actions →
+#     investblog / octagons / release.yml
+#   - Repo → Settings → Secrets → DELETE NPM_TOKEN, and revoke it on npmjs.com.
+#     Every later release goes through release.yml over OIDC with no secret at all.
+#
+# This publish carries NO provenance — attestation only comes from the OIDC path.
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Fail early if the secret is missing
+        run: |
+          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
+            echo "::error::NPM_TOKEN is not set. Add it under Settings → Secrets → Actions."
+            exit 1
+          fi
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
+
+      - name: Verify the tarball carries both entry files
+        run: |
+          npm pack --silent > /dev/null
+          TARBALL="$(ls octagons-*.tgz)"
+          tar -tzf "$TARBALL" | sed 's|^package/||' | sort
+          for f in octagons.js octagons.min.js package.json README.md LICENSE; do
+            tar -tzf "$TARBALL" | grep -qx "package/$f" || {
+              echo "::error::$f missing from the published tarball"; exit 1; }
+          done
+          rm -f "$TARBALL"
+
+      - name: Publish
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Next steps
+        run: |
+          echo "Published. Now:"
+          echo "  1. npmjs.com -> octagons -> Settings -> Trusted Publisher"
+          echo "     GitHub Actions | investblog | octagons | release.yml"
+          echo "  2. Delete the NPM_TOKEN secret and revoke the token."
+          echo "  3. Future releases: npm version patch && git push --follow-tags"

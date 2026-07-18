@@ -15,7 +15,24 @@ commit, and workflow run. Same mechanism as `@spintax/core`.
    - **Environment:** *(leave blank)*
 3. Save.
 
-> **Caveat for the very first release.** `octagons` has never been published, and
+### The first publish, when there is no package page yet
+
+npm has no Settings page for a package that does not exist, so the very first publish
+cannot use Trusted Publishing. Use `.github/workflows/bootstrap-publish.yml` once:
+
+1. npmjs.com → **Access Tokens** → Generate → **Automation** (Automation skips the OTP
+   that 2FA otherwise forces on publish).
+2. Repo → **Settings → Secrets and variables → Actions → New repository secret**,
+   named `NPM_TOKEN`. GitHub stores it encrypted and write-only — it cannot be read back.
+3. **Actions → Bootstrap publish (one-time) → Run workflow.**
+4. Then configure Trusted Publisher as above, **delete the `NPM_TOKEN` secret, and revoke
+   the token**. Nothing after this needs a secret.
+
+Prefer this to a local token file: the secret lives in a proper store rather than
+plaintext on a workstation, and it is deleted the moment it has done its one job. That
+first publish carries **no provenance** — attestation only comes from the OIDC path.
+
+> **Original caveat.** `octagons` has never been published, and
 > npm's documentation does not say whether a trusted publisher can be configured for a
 > package that does not exist yet. Try step 1 first. **If npmjs.com will not let you
 > configure it** (no package page to open Settings on), do one manual publish to create
