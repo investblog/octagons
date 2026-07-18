@@ -1,0 +1,26 @@
+{
+  "name": "octagons-lite",
+  "version": "0.1.0",
+  "description": "Animated backgrounds built from regular octagons. Line art, zero dependencies.",
+  "main": "octagons-lite.js",
+  "files": [
+    "octagons-lite.js",
+    "octagons-lite.min.js"
+  ],
+  "scripts": {
+    "build": "npx terser octagons-lite.js --compress --mangle -o octagons-lite.min.js",
+    "size": "npx terser octagons-lite.js --compress --mangle | gzip -9 | wc -c",
+    "lint": "npx eslint ."
+  },
+  "keywords": [
+    "octagon",
+    "background",
+    "canvas",
+    "animation",
+    "generative",
+    "line-art",
+    "lightweight"
+  ],
+  "license": "MIT",
+  "private": true
+}

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OctagonsLite — demo</title>
+<style>
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:#05070d;color:#dbe0f0;
+       font:16px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+  section{position:relative;min-height:100vh;display:flex;align-items:center;
+          justify-content:center;overflow:hidden}
+  .bg{position:absolute;inset:0;z-index:0}
+  .inner{position:relative;z-index:1;max-width:720px;padding:48px 28px;text-align:center}
+  h1{font-size:clamp(38px,7vw,76px);line-height:1.02;margin:0 0 18px;letter-spacing:-.03em;
+     font-weight:650}
+  h2{font-size:clamp(26px,4vw,40px);margin:0 0 14px;letter-spacing:-.02em;font-weight:620}
+  p{margin:0 0 14px;color:#a7afc9;font-size:17px}
+  .tag{display:inline-block;font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+       color:#8fa2ff;margin-bottom:18px}
+  code{font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;color:#c8d0ee;
+       background:rgba(20,26,50,.72);border:1px solid #232a45;border-radius:7px;
+       padding:2px 7px}
+  pre{text-align:left;background:rgba(10,13,26,.78);border:1px solid #1e2440;border-radius:10px;
+      padding:16px 18px;overflow:auto;margin:22px 0 0}
+  pre code{background:none;border:0;padding:0;color:#b9c3e8}
+  .btn{display:inline-block;margin:22px 6px 0;padding:11px 22px;border-radius:8px;
+       border:1px solid #2c3557;background:rgba(18,23,44,.8);color:#dbe0f0;
+       text-decoration:none;font-size:15px;cursor:pointer}
+  .btn:hover{border-color:#8fa2ff}
+  .btn.primary{background:#2c3a76;border-color:#4d63c8}
+
+  /* live control panel */
+  #panel{position:fixed;right:14px;top:14px;z-index:50;width:236px;
+         background:rgba(8,11,22,.93);border:1px solid #1e2440;border-radius:11px;
+         padding:13px 14px;backdrop-filter:blur(9px);font-size:12px}
+  #panel h3{margin:0 0 10px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+            color:#6f7796;font-weight:600}
+  #panel label{display:block;margin:0 0 9px;color:#7d84a0}
+  #panel b{color:#8fa2ff;font-variant-numeric:tabular-nums;float:right}
+  #panel input[type=range]{width:100%;margin-top:3px}
+  .row{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+  .row button{flex:1;min-width:56px;background:#101425;border:1px solid #222840;color:#c9cee0;
+              padding:5px 4px;border-radius:6px;cursor:pointer;font:inherit;font-size:11px}
+  .row button.on{background:#1c2444;border-color:#8fa2ff;color:#e2e6ff}
+  #fps{color:#565c78;font-variant-numeric:tabular-nums;font-size:11px;margin-top:4px}
+  @media(max-width:820px){#panel{display:none}}
+</style>
+</head>
+<body>
+
+<div id="panel">
+  <h3>live controls</h3>
+  <div class="row">
+    <button data-mode="field" class="on">field</button>
+    <button data-mode="lattice">lattice</button>
+  </div>
+  <div class="row" id="nodeRow" style="display:none">
+    <button data-nodes="diamond" class="on">diamond</button>
+    <button data-nodes="octagon">octagon</button>
+    <button data-nodes="both">both</button>
+  </div>
+  <label>size <b id="v-size">110</b>
+    <input type="range" id="size" min="40" max="240" step="2" value="110"></label>
+  <label>count <b id="v-count">90</b>
+    <input type="range" id="count" min="20" max="240" step="2" value="90"></label>
+  <label id="l-bond" style="display:none">bond <b id="v-bond">0.18</b>
+    <input type="range" id="bond" min="0" max="0.6" step="0.01" value="0.18"></label>
+  <label>speed <b id="v-speed">1.0</b>
+    <input type="range" id="speed" min="0" max="3" step="0.05" value="1"></label>
+  <label>weight <b id="v-weight">1.0</b>
+    <input type="range" id="weight" min="0.3" max="3" step="0.05" value="1"></label>
+  <div class="row">
+    <button id="glow" class="on">glow</button>
+    <button id="pal">palette</button>
+  </div>
+  <div id="fps">—</div>
+</div>
+
+<section>
+  <div class="bg" id="hero"></div>
+  <div class="inner">
+    <span class="tag">zero dependencies</span>
+    <h1>Backgrounds built from regular octagons.</h1>
+    <p>Line art on canvas. The colour gradient runs along the edges, never fills them.
+       Every octagon is exactly regular — the shape is the point.</p>
+    <a class="btn primary" href="#lattice">See the lattice</a>
+    <a class="btn" href="#usage">Usage</a>
+  </div>
+</section>
+
+<section id="lattice">
+  <div class="bg" id="bg2"></div>
+  <div class="inner">
+    <span class="tag">mode: lattice</span>
+    <h2>A regular octagon cannot tile the plane.</h2>
+    <p>Proven by Reinhardt in 1918: no strictly convex polygon with seven or more
+       sides tiles at all. So the lattice uses the truncated-square tiling, where the
+       corner cut <code>(2 − √2) / 2</code> makes the octagon exactly regular.</p>
+    <p>Nothing is filled, so the leftover square at each node is just an outline —
+       and can be swapped for a small octagon instead. Neighbours are randomly
+       bonded along shared edges to break the grid.</p>
+  </div>
+</section>
+
+<section id="usage">
+  <div class="bg" id="bg3"></div>
+  <div class="inner">
+    <span class="tag">usage</span>
+    <h2>One call.</h2>
+<pre><code>&lt;div class="bg"&gt;&lt;/div&gt;
+
+&lt;script src="octagons-lite.js"&gt;&lt;/script&gt;
+&lt;script&gt;
+  var og = OctagonsLite.init('.bg', {
+    mode:   'field',        // 'field' | 'lattice'
+    colors: ['#33417c', '#6478da', '#b3bfff'],
+    accent: '#e0b070',
+    size:   110,
+    bond:   0.18            // lattice: fuse neighbours
+  });
+&lt;/script&gt;</code></pre>
+    <p style="margin-top:20px">Pauses when the tab is hidden. Caps device pixel ratio at 2.
+       Cleans up after itself with <code>destroy()</code>.</p>
+  </div>
+</section>
+
+<script src="octagons-lite.js"></script>
+<script>
+var PALS = [
+  { colors:['#33417c','#6478da','#b3bfff'], accent:'#e0b070', bg:'#05070d', halo:'#0c1330' },
+  { colors:['#44464f','#9a9ca6','#eef0f6'], accent:'#c89c5c', bg:'#0a0a0c', halo:'#131318' },
+  { colors:['#215c5e','#42b8b0','#aef2e6'], accent:'#e8c070', bg:'#06070c', halo:'#08191b' }
+];
+var pal = 0;
+
+var hero = OctagonsLite.init('#hero', { mode:'field', size:110 });
+var two  = OctagonsLite.init('#bg2',  { mode:'lattice', size:104, bond:0.18, nodes:'diamond' });
+var three= OctagonsLite.init('#bg3',  { mode:'field', size:150, count:52, speed:0.55, vignette:0.55 });
+var all = [hero, two, three];
+
+// the panel drives the hero only — the other two stay as authored
+function $(id){ return document.getElementById(id); }
+function bind(id, key, fmt){
+  $(id).addEventListener('input', function(e){
+    var v = +e.target.value;
+    $('v-'+id).textContent = fmt ? fmt(v) : v;
+    var o = {}; o[key] = v; hero.set(o);
+  });
+}
+bind('size','size'); bind('count','count');
+bind('speed','speed',function(v){return v.toFixed(1);});
+bind('weight','weight',function(v){return v.toFixed(1);});
+bind('bond','bond',function(v){return v.toFixed(2);});
+
+[].forEach.call(document.querySelectorAll('[data-mode]'), function(b){
+  b.addEventListener('click', function(){
+    [].forEach.call(document.querySelectorAll('[data-mode]'),function(o){o.classList.remove('on');});
+    b.classList.add('on');
+    var m = b.dataset.mode;
+    hero.set({ mode:m });
+    $('nodeRow').style.display = m==='lattice' ? 'flex' : 'none';
+    $('l-bond').style.display  = m==='lattice' ? 'block' : 'none';
+  });
+});
+[].forEach.call(document.querySelectorAll('[data-nodes]'), function(b){
+  b.addEventListener('click', function(){
+    [].forEach.call(document.querySelectorAll('[data-nodes]'),function(o){o.classList.remove('on');});
+    b.classList.add('on');
+    hero.set({ nodes:b.dataset.nodes });
+  });
+});
+var glowOn = true;
+$('glow').addEventListener('click', function(){
+  glowOn = !glowOn; this.classList.toggle('on', glowOn);
+  hero.set({ glow:glowOn });
+});
+$('pal').addEventListener('click', function(){
+  pal = (pal+1) % PALS.length;
+  var p = PALS[pal];
+  document.body.style.background = p.bg;
+  all.forEach(function(x){ x.set({ colors:p.colors, accent:p.accent }); });
+});
+
+// honest fps meter, measured off the page's own rAF
+var f=0, acc=0, last=performance.now();
+(function loop(now){
+  var dt=(now-last)/1000; last=now; f++; acc+=dt;
+  if(acc>0.5){ $('fps').textContent = Math.round(f/acc)+' fps · dpr '+Math.min(2,devicePixelRatio); f=0; acc=0; }
+  requestAnimationFrame(loop);
+})(performance.now());
+</script>
+</body>
+</html>
