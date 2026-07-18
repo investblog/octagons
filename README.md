@@ -5,16 +5,35 @@ gradient runs along the edges, nothing is ever filled. Zero dependencies, ~3.1 K
 
 Two modes: octagons drifting toward the viewer in depth, or a static lattice.
 
+[![npm](https://img.shields.io/npm/v/octagons.svg)](https://www.npmjs.com/package/octagons)
+[![license](https://img.shields.io/npm/l/octagons.svg)](LICENSE)
+
 **[Live demo →](https://investblog.github.io/octagons/)**
+
+## Install
+
+```sh
+npm install octagons
+```
+
+Or straight from a CDN, no build step:
+
+```html
+<script src="https://cdn.jsdelivr.net/npm/octagons@0.1/octagons.min.js"></script>
+```
+
+Then:
 
 ```html
 <div class="bg"></div>
 
-<script src="octagons.js"></script>
 <script>
   Octagons.init('.bg', { mode: 'field' });
 </script>
 ```
+
+The script defines a single global, `Octagons`. There is no module build — it is a
+browser script, and `main` points at the unminified source for bundlers that inline it.
 
 The container needs a size of its own — the canvas fills it. A typical hero:
 
