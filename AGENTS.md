@@ -1,4 +1,4 @@
-# octagons-lite — AGENTS.md
+# octagons — AGENTS.md
 
 Zero-dependency browser library: animated backgrounds built from **regular** octagons,
 drawn as line art (the colour gradient runs along the edges, nothing is filled).

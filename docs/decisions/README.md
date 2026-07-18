@@ -2,7 +2,7 @@
 type: note
 status: active
 tags: [adr]
-project: octagons-lite
+project: octagons
 ---
 
 # Decisions (ADR)

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OctagonsLite — demo</title>
+<title>Octagons — demo</title>
 <style>
   /* Tokens, names and values lifted from 301-ui static/css/theme.css so this page
      matches the house style. Theme is the `data-theme` attribute on <html>, dark is
@@ -195,12 +195,12 @@
 <nav>
   <a class="wordmark" href="#top">
     <svg viewBox="-1 -1 2 2" aria-hidden="true"><polygon points=".924 .383 .383 .924 -.383 .924 -.924 .383 -.924 -.383 -.383 -.924 .383 -.924 .924 -.383" fill="none" stroke="currentColor" stroke-width=".16"/></svg>
-    octagons-lite
+    octagons
   </a>
-  <a class="item" href="https://github.com/investblog/octagons-lite" target="_blank" rel="noopener noreferrer">
+  <a class="item" href="https://github.com/investblog/octagons" target="_blank" rel="noopener noreferrer">
     <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.4 7.4 0 0 1 2-.27c.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8"/></svg><span>GitHub</span>
   </a>
-  <a class="item" href="https://github.com/investblog/octagons-lite#readme" target="_blank" rel="noopener noreferrer">
+  <a class="item" href="https://github.com/investblog/octagons#readme" target="_blank" rel="noopener noreferrer">
     <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M2.5 2.5h5a2 2 0 0 1 2 2v9a1.6 1.6 0 0 0-1.6-1.6H2.5zM13.5 2.5h-5a2 2 0 0 0-2 2v9a1.6 1.6 0 0 1 1.6-1.6h5.4z"/></svg><span>Docs</span>
   </a>
   <a class="item" href="https://301.st" target="_blank" rel="noopener noreferrer">
@@ -246,10 +246,10 @@
        under code, cards, panels — skip the canvas entirely and use a repeating SVG
        as a plain <code>background-image</code>.</p>
 
-<pre id="code-sample"><code>&lt;script src="octagons-lite.js"&gt;&lt;/script&gt;
+<pre id="code-sample"><code>&lt;script src="octagons.js"&gt;&lt;/script&gt;
 &lt;script&gt;
   document.querySelector('pre').style.backgroundImage =
-    OctagonsLite.pattern({
+    Octagons.pattern({
       size:    22,          // cell pitch, px
       opacity: 0.09,        // keep it barely there
       nodes:   'diamond'    // or 'octagon' / 'both'
@@ -274,9 +274,9 @@
     <h2>One call.</h2>
 <pre><code>&lt;div class="bg"&gt;&lt;/div&gt;
 
-&lt;script src="octagons-lite.js"&gt;&lt;/script&gt;
+&lt;script src="octagons.js"&gt;&lt;/script&gt;
 &lt;script&gt;
-  var og = OctagonsLite.init('.bg', {
+  var og = Octagons.init('.bg', {
     mode:   'field',        // 'field' | 'lattice'
     colors: ['#33417c', '#6478da', '#b3bfff'],
     accent: '#0066ff',
@@ -286,7 +286,7 @@
 &lt;/script&gt;</code></pre>
     <p style="margin-top:20px">Pauses when the tab is hidden. Caps device pixel ratio at 2.
        Cleans up after itself with <code>destroy()</code>.</p>
-    <a class="btn btn--primary" href="https://github.com/investblog/octagons-lite" target="_blank" rel="noopener noreferrer">View on GitHub</a>
+    <a class="btn btn--primary" href="https://github.com/investblog/octagons" target="_blank" rel="noopener noreferrer">View on GitHub</a>
   </div>
 </section>
 
@@ -326,7 +326,7 @@
   </div>
 </div>
 
-<script src="octagons-lite.js"></script>
+<script src="octagons.js"></script>
 <script>
 function $(id){ return document.getElementById(id); }
 
@@ -352,17 +352,17 @@ function theme(){
   return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
 }
 
-var hero  = OctagonsLite.init('#hero', { mode:'field', size:110 });
-var two   = OctagonsLite.init('#bg2',  { mode:'lattice', size:104, bond:0.18 });
-var three = OctagonsLite.init('#bg3',  { mode:'field', size:150, count:52, speed:0.55 });
+var hero  = Octagons.init('#hero', { mode:'field', size:110 });
+var two   = Octagons.init('#bg2',  { mode:'lattice', size:104, bond:0.18 });
+var three = Octagons.init('#bg3',  { mode:'field', size:150, count:52, speed:0.55 });
 var heroMode = 'field';
 
 function paintPatterns(){
   var c = tok('--oct-line-3');
   $('code-sample').style.backgroundImage =
-    OctagonsLite.pattern({ size:22, opacity:0.09, color:c });
+    Octagons.pattern({ size:22, opacity:0.09, color:c });
   [].forEach.call(document.querySelectorAll('.swatches i'), function(el){
-    el.style.backgroundImage = OctagonsLite.pattern({
+    el.style.backgroundImage = Octagons.pattern({
       size:+el.dataset.p, opacity:+el.dataset.o,
       nodes:el.dataset.n || 'diamond', color:c
     });

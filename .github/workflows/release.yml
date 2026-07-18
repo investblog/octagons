@@ -1,9 +1,9 @@
 name: Release
 
-# Publishes octagons-lite to npm with PROVENANCE via OIDC Trusted Publishing —
+# Publishes octagons to npm with PROVENANCE via OIDC Trusted Publishing —
 # no tokens, no OTP. One-time setup on npmjs.com is required (see RELEASING.md):
-# package octagons-lite → Settings → Trusted Publisher → GitHub Actions →
-# org/repo = investblog/octagons-lite, workflow = release.yml.
+# package octagons → Settings → Trusted Publisher → GitHub Actions →
+# org/repo = investblog/octagons, workflow = release.yml.
 #
 # Release flow: bump package.json → commit → tag vX.Y.Z → push tag.
 
@@ -46,7 +46,7 @@ jobs:
             echo "::error::Tag v$TAG does not match package version $PKG"
             exit 1
           fi
-          echo "Publishing octagons-lite@$PKG"
+          echo "Publishing octagons@$PKG"
 
       # A tag can point at ANY commit, so main's CI passing is not a precondition
       # for publishing. This job re-runs the gates rather than trusting an upstream
@@ -64,10 +64,10 @@ jobs:
       - name: Verify the tarball carries both entry files
         run: |
           npm pack --silent > /dev/null
-          TARBALL="$(ls octagons-lite-*.tgz)"
+          TARBALL="$(ls octagons-*.tgz)"
           echo "Inspecting $TARBALL"
           tar -tzf "$TARBALL" | sed 's|^package/||' | sort
-          for f in octagons-lite.js octagons-lite.min.js package.json README.md LICENSE; do
+          for f in octagons.js octagons.min.js package.json README.md LICENSE; do
             tar -tzf "$TARBALL" | grep -qx "package/$f" || {
               echo "::error::$f missing from the published tarball"; exit 1; }
           done

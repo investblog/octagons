@@ -1,8 +1,8 @@
 /**
- * OctagonsLite — animated backgrounds built from regular octagons.
+ * Octagons — animated backgrounds built from regular octagons.
  * Zero dependencies. Line art: the colour gradient runs along the edges.
  *
- * var og = OctagonsLite.init('.bg', { mode: 'field', colors: [...] });
+ * var og = Octagons.init('.bg', { mode: 'field', colors: [...] });
  * og.stop(); og.start(); og.destroy();
  *
  * Modes:
@@ -423,7 +423,7 @@
 	 * Returns `url("data:image/svg+xml,…")`, ready for `background-image`.
 	 *
 	 * document.querySelector('pre').style.backgroundImage =
-	 *   OctagonsLite.pattern({ size: 22, opacity: 0.09 });
+	 *   Octagons.pattern({ size: 22, opacity: 0.09 });
 	 */
 	function pattern(opts) {
 		opts = opts || {};
@@ -479,5 +479,5 @@
 		return 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '")';
 	}
 
-	window.OctagonsLite = { init: init, pattern: pattern };
+	window.Octagons = { init: init, pattern: pattern };
 })();

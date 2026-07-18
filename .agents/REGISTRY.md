@@ -49,7 +49,7 @@ only after observing it fail:
   library source. A silently passing gate is worse than a failing one.
 
 Verified after the fix: `npx eslint . --format json` reports 2 files linted
-(`octagons-lite.js`, `eslint.config.js`), 0 errors, and the pre-commit hook now runs
+(`octagons.js`, `eslint.config.js`), 0 errors, and the pre-commit hook now runs
 `npm run -s lint`.
 
 Config is minimal and matches the code as written: `ecmaVersion: 5`, `sourceType: script`
@@ -60,14 +60,16 @@ package — the library is advertised as zero-dependency.
 library; do not add TypeScript merely to satisfy the gate.
 
 ### Decisions — now confirmed (2026-07-18)
-- **Package name** `octagons-lite` — confirmed.
+- **Package name** `octagons` — confirmed.
 - **License MIT, copyright 301ST (https://301.st)** — confirmed; `LICENSE` written.
-- **Repository** `github.com/investblog/octagons-lite`, public. Chosen over the
+- **Repository** `github.com/investblog/octagons`, public. Chosen over the
   `admin310st` account, which was also authenticated, so that it sits next to the
   sibling `trigons-lite`.
-- `"private": true` is **still set** in `package.json`. It blocks `npm publish`
-  outright and is deliberately kept as a guard until npm release is actually decided;
-  removing that one line is the whole change.
-- `prepublishOnly` runs the build, because `octagons-lite.min.js` is gitignored (see
+- **Renamed to `octagons` (2026-07-18)** before the first publish — package, repo,
+  file names and the global all moved together. Free to do now, breaking later:
+  the global went `OctagonsLite` -> `Octagons` with zero consumers on the registry.
+  npm forbids publishing a package merely to reserve a name, so the short name is
+  taken by the real library rather than a placeholder.
+- `prepublishOnly` runs the build, because `octagons.min.js` is gitignored (see
   `git-discipline`) yet listed in `files` — publishing without it would ship a package
   missing its own minified entry.

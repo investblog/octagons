@@ -2,7 +2,7 @@
 type: note
 status: active
 tags: [backlog]
-project: octagons-lite
+project: octagons
 ---
 
 # Backlog
@@ -14,7 +14,7 @@ exists; an item is dropped when its plan moves to `plans/done/`.
 
 - **Remove `"private": true` from `package.json`.** It is the deliberate guard against
   an accidental `npm publish`; nothing else blocks the release.
-- **Check the name is free on npm.** `octagons-lite` has not been verified as available.
+- **Check the name is free on npm.** `octagons` has not been verified as available.
 - **Decide the version.** Currently `0.1.0`. Publishing `1.0.0` implies API stability;
   the option surface is young and `set()` semantics may still move.
 - **Sponsor attribution, if it ships.** One line and one link to a corporate page, kept

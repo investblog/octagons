@@ -1,18 +1,18 @@
-# octagons-lite
+# octagons
 
 Animated backgrounds built from **regular** octagons. Line art on canvas — the colour
 gradient runs along the edges, nothing is ever filled. Zero dependencies, ~3.1 KB gzipped.
 
 Two modes: octagons drifting toward the viewer in depth, or a static lattice.
 
-**[Live demo →](https://investblog.github.io/octagons-lite/)**
+**[Live demo →](https://investblog.github.io/octagons/)**
 
 ```html
 <div class="bg"></div>
 
-<script src="octagons-lite.js"></script>
+<script src="octagons.js"></script>
 <script>
-  OctagonsLite.init('.bg', { mode: 'field' });
+  Octagons.init('.bg', { mode: 'field' });
 </script>
 ```
 
@@ -24,7 +24,7 @@ The container needs a size of its own — the canvas fills it. A typical hero:
 .hero > .content { position: relative; z-index: 1; }
 ```
 
-The [live demo](https://investblog.github.io/octagons-lite/) is `index.html` in this
+The [live demo](https://investblog.github.io/octagons/) is `index.html` in this
 repo — a playground with every option wired to a control, in both themes.
 
 ## Modes
@@ -37,7 +37,7 @@ distance; only its scale changes. Some carry a concentric inner ring, a few use 
 accent colour, and the field drifts with the pointer.
 
 ```js
-OctagonsLite.init('.bg', {
+Octagons.init('.bg', {
   mode: 'field',
   count: 90,
   speed: 1,
@@ -51,7 +51,7 @@ A square lattice with every corner cut, so each cell becomes a regular octagon a
 lattice node a small square. A soft band of light sweeps across the edges.
 
 ```js
-OctagonsLite.init('.bg', {
+Octagons.init('.bg', {
   mode: 'lattice',
   nodes: 'octagon',   // replace the square nodes with small octagons
   bond: 0.18          // randomly fuse neighbouring octagons
@@ -70,7 +70,7 @@ repeating SVG as a ready-to-use `background-image`.
 
 ```js
 document.querySelector('pre').style.backgroundImage =
-  OctagonsLite.pattern({ size: 22, opacity: 0.09 });
+  Octagons.pattern({ size: 22, opacity: 0.09 });
 ```
 
 Nothing animates and nothing runs afterwards — it is one tile handed to CSS.
@@ -120,7 +120,7 @@ octagons and their nodes are clearly legible.
 `init()` returns `null` if the selector matches nothing, otherwise:
 
 ```js
-var og = OctagonsLite.init('.bg');
+var og = Octagons.init('.bg');
 
 og.set({ mode: 'lattice', bond: 0.25 });  // change options live
 og.stop();                                 // pause

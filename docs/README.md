@@ -2,10 +2,10 @@
 type: note
 status: active
 tags: [architecture, overview]
-project: octagons-lite
+project: octagons
 ---
 
-# octagons-lite — dev source of truth
+# octagons — dev source of truth
 
 Docs for developers and agents. `index.html` is the verification surface.
 Contract-first: change the doc here **before** the code, then code.
@@ -74,8 +74,8 @@ a triangle mesh you cannot jitter positions.
 
 | Path | Role |
 |---|---|
-| `octagons-lite.js` | The source. The only file you edit. |
-| `octagons-lite.min.js` | **Generated** by `npm run build`. Not yet built. |
+| `octagons.js` | The source. The only file you edit. |
+| `octagons.min.js` | **Generated** by `npm run build`. Not yet built. |
 | `index.html` | Three sections; live controls drive the hero instance. |
 
 ## Commands
@@ -83,7 +83,7 @@ a triangle mesh you cannot jitter positions.
 | Command | What |
 |---|---|
 | `npm run lint` | ESLint (also runs in the pre-commit gate) |
-| `npm run build` | Minify → `octagons-lite.min.js` |
+| `npm run build` | Minify → `octagons.min.js` |
 | `npm run size` | gzip size of the minified output |
 
 Serve locally and **look at it** — this is a visual library and lint proves nothing:

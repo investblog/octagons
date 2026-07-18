@@ -21,5 +21,5 @@ jobs:
       - run: npm run build
       - name: Report size
         run: |
-          echo "minified: $(wc -c < octagons-lite.min.js) B"
-          echo "gzipped:  $(gzip -9 -c octagons-lite.min.js | wc -c) B"
+          echo "minified: $(wc -c < octagons.min.js) B"
+          echo "gzipped:  $(gzip -9 -c octagons.min.js | wc -c) B"

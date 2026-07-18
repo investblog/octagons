@@ -1,15 +1,15 @@
 {
-  "name": "octagons-lite",
+  "name": "octagons",
   "version": "0.1.0",
   "description": "Animated backgrounds built from regular octagons. Line art, zero dependencies.",
-  "main": "octagons-lite.js",
+  "main": "octagons.js",
   "files": [
-    "octagons-lite.js",
-    "octagons-lite.min.js"
+    "octagons.js",
+    "octagons.min.js"
   ],
   "scripts": {
-    "build": "terser octagons-lite.js --compress --mangle -o octagons-lite.min.js",
-    "size": "terser octagons-lite.js --compress --mangle | gzip -9 | wc -c",
+    "build": "terser octagons.js --compress --mangle -o octagons.min.js",
+    "size": "terser octagons.js --compress --mangle | gzip -9 | wc -c",
     "lint": "eslint .",
     "prepublishOnly": "npm run build"
   },
@@ -24,13 +24,13 @@
   ],
   "author": "301st (https://301.st)",
   "license": "MIT",
-  "homepage": "https://github.com/investblog/octagons-lite#readme",
+  "homepage": "https://github.com/investblog/octagons#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/investblog/octagons-lite.git"
+    "url": "git+https://github.com/investblog/octagons.git"
   },
   "bugs": {
-    "url": "https://github.com/investblog/octagons-lite/issues"
+    "url": "https://github.com/investblog/octagons/issues"
   },
   "devDependencies": {
     "eslint": "^9.39.4",

@@ -1,4 +1,4 @@
-# Releasing `octagons-lite`
+# Releasing `octagons`
 
 Releases publish from GitHub Actions (`.github/workflows/release.yml`) using npm
 **Trusted Publishing (OIDC)** — no npm tokens are stored anywhere, and every release
@@ -7,15 +7,15 @@ commit, and workflow run. Same mechanism as `@spintax/core`.
 
 ## One-time setup on npmjs.com (required before the first CI release)
 
-1. Go to **npmjs.com → `octagons-lite` → Settings → Trusted Publisher**.
+1. Go to **npmjs.com → `octagons` → Settings → Trusted Publisher**.
 2. Choose **GitHub Actions** and fill in:
    - **Organization or user:** `investblog`
-   - **Repository:** `octagons-lite`
+   - **Repository:** `octagons`
    - **Workflow filename:** `release.yml`
    - **Environment:** *(leave blank)*
 3. Save.
 
-> **Caveat for the very first release.** `octagons-lite` has never been published, and
+> **Caveat for the very first release.** `octagons` has never been published, and
 > npm's documentation does not say whether a trusted publisher can be configured for a
 > package that does not exist yet. Try step 1 first. **If npmjs.com will not let you
 > configure it** (no package page to open Settings on), do one manual publish to create
@@ -58,14 +58,14 @@ gates rather than trusting that main was green.
 ## Verifying a release
 
 - The npm page shows a **"Provenance"** section with the source commit and build.
-- `npm view octagons-lite` reflects the new version.
+- `npm view octagons` reflects the new version.
 - `npm audit signatures` (in a project that installed it) verifies the attestation.
 
 ## Notes
 
 - Zero runtime dependencies. The tarball is the source file, the minified build, README
   and LICENSE — see `files` in `package.json`.
-- **`octagons-lite.min.js` is gitignored**, per the `git-discipline` rule against
+- **`octagons.min.js` is gitignored**, per the `git-discipline` rule against
   committing generated artifacts, so it exists only at publish time. `prepublishOnly`
   rebuilds it, and the workflow additionally asserts it is present in the tarball —
   without that check a broken build would ship a package missing its own minified entry.
