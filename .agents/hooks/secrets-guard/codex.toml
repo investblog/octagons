@@ -1,0 +1,9 @@
+# Merge into ./.codex/config.toml. Matcher = codex tool names that carry a path/command;
+# adjust to your codex version's tool names if they differ.
+[[hooks.PreToolUse]]
+matcher = "Bash|apply_patch"
+
+[[hooks.PreToolUse.hooks]]
+type = "command"
+command = 'bash ".agents/hooks/secrets-guard/guard.sh" --codex'
+statusMessage = "secrets-guard"

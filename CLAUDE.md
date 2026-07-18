@@ -1,0 +1,1 @@
+W:/projects/trigons-lite/AGENTS.md

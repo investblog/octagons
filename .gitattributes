@@ -1,0 +1,6 @@
+# Fresh repo: pin LF + UTF-8 before the first commit.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.gif binary
+*.ico binary

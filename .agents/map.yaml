@@ -1,0 +1,80 @@
+# ~/.agents/map.yaml — link map: rule ⇒ chain, plus base (always-on) and types (domains).
+# All chain values are arrays of strings (file/folder names in the matching library folder).
+# A rule with `{}` has no chain: its text is self-contained (CLI tools / behavioral / living).
+# If a rule named in `base`/`types` is absent from `rules` — bootstrap skips it with a warning.
+# All skills/agents/templates referenced below are built and present in the library.
+
+rules:
+  # --- meta ---
+  rule-format:       {}
+
+  # --- coding quality gates (CLI tools, no skill needed) ---
+  quality-py:        {hooks: [light-lint]}   # light-lint: PostToolUse fast lint of the edited file
+  quality-js:        {hooks: [light-lint]}
+  quality-bash:      {hooks: [light-lint]}
+  quality-perl:      {hooks: [light-lint]}
+  quality-cpp:       {hooks: [light-lint]}
+  code-search:       {agents: [searcher]}      # prefer structural index over grep; codegraph/gortex is project-level
+
+  # --- behavioral ---
+  env-setup:         {}
+  project-docs:      {agents: [docs]}          # docs/ source-of-truth + plans active/done + ADR; must-have (base)
+  user-docs:         {}          # README + user docs (doc folder name varies); conditional (product surface)
+  git-discipline:    {}
+  proof-loop:        {}
+  code-review:       {agents: [reviewer]}      # review protocol: gates -> trace -> Critical/Warning/Info
+  delegation:        {}          # multi-agent lead+scoped-agents; NOT in any domain — self-config pulls it for LARGE projects only (roster is project-defined)
+  secrets:           {hooks: [secrets-guard]}   # principle (text); PreToolUse guard blocks read/write of secret files
+  search-escalation:
+    mcp:    [playwright]         # L3 browser; websearch/fetch are agent-native
+    agents: [searcher]
+  browser-use:
+    mcp:    [playwright]         # interactive browser: console-result vs UI/user-in-the-loop
+    agents: [e2e]                # read-only UI/E2E smoke tester (report + Playwright limits)
+
+  deploy-models:
+    skills: [remote-tmux-ops, deploy-verify, fastapi-scaffold]   # service lifecycle: scaffold, deploy+verify, remote ops
+
+  # --- living (extend via self-config, do not freeze) ---
+  css-practices:     {}
+  seo:               {}
+  writing-style:     {}          # prose dislikes (anti-AI-slop) for drafted output; living
+  content-vault:     {}          # content/ for non-dev audiences + capture->publish/archive + doc-RAG (sqlite-vec, on-need)
+
+  # --- cross-domain instrumental ---
+  cf-auth:           {}          # CF API auth channels (OAuth / Global Key / Scoped Bearer); pick before any CF op
+  sql-migrations:    {}          # numbered immutable additive migrations + ledger (DB-agnostic)
+  edge-compat:       {}          # CF Workers runtime constraints (no Node API, Web Crypto, edge-compat deps)
+  cf-free-tier:      {}          # WebFetch live CF limits before designing on a CF service (never from memory)
+  i18n:              {}          # frontend localization: UI vs content layer, namespaced keys, all-locales
+  cf-wrangler:
+    skills: [cf-secrets]         # CF-specific secrets procedure (list/put/rotate/distribute/check). cloudflare MCP is project-level — resolved per project (see rule).
+  seo-analytics:     {}          # GSC MCP is project-level (not in baseline — see rule)
+  media:
+    skills: [ffmpeg-recipes]     # CLI media (ffmpeg/imagemagick) for content/design
+
+  # --- domain pipelines ---
+  md2pdf:
+    skills:    [md2pdf-convert]
+    agents:    [doc-converter]
+    templates: [pdf-style]
+    # pandoc is a CLI tool (citations/office formats), not an MCP — handled in the skill
+  extract-docs:      {}          # pdftotext/pandoc/tesseract are CLI tools, not MCP
+  viz-data:          {}
+
+# Always-on: applied unconditionally, NOT selectable. Kept separate from `types` on purpose.
+base: [rule-format, env-setup, project-docs, proof-loop, secrets, git-discipline]
+
+# Selectable domains (survey multi-selects; a project may pick several).
+# Final rule set = base ∪ rules of the selected domains (union dedups shared rules).
+types:
+  coding:   [quality-py, quality-js, quality-bash, quality-perl, quality-cpp, code-search, code-review, user-docs]
+  web:      [quality-js, css-practices, seo, cf-wrangler, cf-auth, edge-compat, cf-free-tier, i18n, browser-use, user-docs]
+  research: [search-escalation, extract-docs, md2pdf, writing-style]
+  office:   [md2pdf, extract-docs]
+  data:     [viz-data, extract-docs]
+  devops:   [deploy-models, cf-wrangler, cf-auth, sql-migrations, cf-free-tier]
+  db:       [cf-wrangler, cf-auth, sql-migrations, cf-free-tier]
+  content:  [seo, seo-analytics, md2pdf, writing-style, media, content-vault]
+  design:   [media]   # CLI media (ffmpeg/imagemagick); AI-gen models resolved per project
+  qa:       [browser-use]   # E2E/UI verification; proof-loop is in base

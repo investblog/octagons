@@ -1,0 +1,26 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Read|Edit|Write|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"W:\\Program Files\\Git\\bin\\bash.exe\" \"$CLAUDE_PROJECT_DIR/.agents/hooks/secrets-guard/guard.sh\" --claude"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"W:\\Program Files\\Git\\bin\\bash.exe\" \"$CLAUDE_PROJECT_DIR/.agents/hooks/light-lint/lint.sh\""
+          }
+        ]
+      }
+    ]
+  }
+}

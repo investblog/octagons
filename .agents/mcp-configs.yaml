@@ -1,0 +1,42 @@
+# ~/.agents/mcp-configs.yaml — MCP recipes by name, split into GLOBAL infra vs PROJECT-BOUND.
+#
+# PORTABLE RECIPE, not frozen machine state. Env-specifics (absolute paths, ports, whether a
+# server is running) are NOT hardcoded — resolved by inventorying the environment.
+#
+# TWO CLASSES (the same global/local criterion as hooks & permissions — is it tied to THIS
+# project's account/resource/repo?):
+#  • GLOBAL infra — shared, tied to no project. Installed ONCE per machine (Setup step, like
+#    baseline-guard) into each agent's GLOBAL config. Bootstrap does NOT render it into project
+#    configs; a project that needs it simply USES the global server. Do NOT duplicate it into
+#    ./.mcp.json / ./.codex/config.toml / ./opencode.json.
+#  • PROJECT-BOUND — tied to a project's account/resource/repo. Rendered per-project into the
+#    project's native MCP config and recorded in ./.agents/REGISTRY.md.
+
+# ── GLOBAL infra (installed once per machine; NOT rendered per-project) ────────
+playwright:
+  scope: global               # shared browser — do NOT write into ./.mcp.json / ./.codex/config.toml
+  transport: local-server     # ONE persistent local server; ALL agents connect by localhost URL (not stdio spawn)
+  # Logical server = @playwright/mcp (Node 18+). A single persistent server per machine, warm &
+  # shared (shared browser context → reused auth/cookies, no cold start) is cheaper than a
+  # per-session stdio spawn. Every agent connects to the SAME server:
+  #   Claude   — ~/.claude/settings.json mcpServers: { "type":"http", "url":"http://localhost:8931/mcp" }
+  #   codex    — ~/.codex/config.toml [mcp_servers.playwright-shared] url="http://localhost:8931/mcp"
+  #              (+ playwright-headed :8932 for a headed/auth profile)
+  #   opencode — ~/.config/opencode global config, same http url.
+  # Endpoint is streamable-HTTP /mcp (NOT legacy /sse). 9222 = Chrome CDP, a separate layer.
+  # LADDER (both Claude & codex):
+  #   (a) connect to http://localhost:8931/mcp;
+  #   (b) if down — ENSURE-SERVER: install the binary if missing (`npm i -g @playwright/mcp`), then
+  #       start `playwright-mcp --port 8931 --headless --shared-browser-context` (Windows: Git Bash / cmd /c npx);
+  #   (c) if it still can't come up (install fails / offline / no perm) — FALL BACK to a per-session
+  #       stdio spawn: Claude `{ "command": "npx", "args": ["-y","@playwright/mcp@latest"] }` (or the
+  #       `playwright-mcp` binary); native Windows `cmd /c npx …`. Self-contained, costlier, always works.
+  #   Best run the server as a machine service/autostart so it stays warm. Never silently give up.
+
+# ── PROJECT-BOUND (rendered per-project on demand; record in REGISTRY) ─────────
+# - cloudflare: claude.ai-managed integration for Claude (account-level, no local command);
+#               codex/opencode need their own Cloudflare MCP (remote) set up per project.
+# - gsc (Google Search Console): not configured anywhere; connect when a project needs it
+#               (auth: OAuth or service account).
+# - codegraph / gortex: structural code-index MCP; set up per project on measured grep-scan
+#               pain (see the code-search rule). Index is a regenerable, gitignored cache.

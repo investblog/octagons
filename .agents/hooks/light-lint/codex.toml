@@ -1,0 +1,9 @@
+# Merge into ./.codex/config.toml. apply_patch is codex's edit tool; the gate parses the
+# patch for changed files. Adjust the matcher to your codex version's tool names if needed.
+[[hooks.PostToolUse]]
+matcher = "apply_patch"
+
+[[hooks.PostToolUse.hooks]]
+type = "command"
+command = 'bash ".agents/hooks/light-lint/lint.sh"'
+statusMessage = "light-lint"

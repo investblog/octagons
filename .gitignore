@@ -1,0 +1,42 @@
+# Baseline .gitignore — bootstrap copies this to ./.gitignore at git init.
+# Extend per project for its stack (see the env-setup rule). Lock file in
+# .agents/generated/ IS committed (provenance) — do not ignore it.
+
+# secrets — never commit (templates like .env.example are kept)
+.env
+.env.*
+!.env.example
+.dev.vars
+.secrets
+*.pem
+id_rsa
+id_ed25519
+
+# dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+.ruff_cache/
+.mypy_cache/
+.pytest_cache/
+
+# build / generated artifacts
+dist/
+build/
+.astro/
+.wrangler/
+*.log
+
+# local indexes — regenerable caches (code-search / content-vault); never commit
+.codegraph/
+.docindex/
+
+# heavy consumed inputs — context/ is committed, but bulky media is not
+context/attachments/
+
+# OS junk
+.DS_Store
+
+# generated build output — rebuilt by `npm run build`, never committed (git-discipline)
+octagons-lite.min.js

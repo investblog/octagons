@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Installed by bootstrap into .git/hooks/pre-commit. Delegates to the tracked gate
+# in ./.agents/ so the logic is version-controlled and editable in the project.
+root="$(git rev-parse --show-toplevel)"
+exec "$root/.agents/hooks/git-quality-gate/gate.sh" commit
