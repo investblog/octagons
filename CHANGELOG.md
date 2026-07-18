@@ -24,6 +24,10 @@ Adds what offline/video rendering needs. No breaking changes; defaults are uncha
 - npm keywords widened from 7 to 16 for search.
 
 ### Notes
+- Published **without provenance**: the tagged OIDC release signed its attestation but
+  the registry refused the upload (404 on PUT, npm's masking of 403), because no trusted
+  publisher is configured for the package yet. Fell back to the one-time token workflow.
+  Provenance arrives with the first release after that setup.
 - `step(dt)`, not `render(absoluteTime)`: field motion is integrated and respawn
   re-randomises position, so there is no closed form to seek to. Frames must be produced
   in order; a clip cannot be split across parallel workers.
