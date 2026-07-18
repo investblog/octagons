@@ -35,12 +35,30 @@ jobs:
           node-version: 22
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Fail early if the secret is missing
+      # npm sends the token as an HTTP header, so any whitespace in it fails with
+      # "npm_*** is not a legal HTTP header value" — which names neither the cause
+      # nor the fix. Pasting two tokens, or one with a trailing newline, does it.
+      # Only lengths are printed here, never the value.
+      - name: Check the secret is present and well formed
+        env:
+          RAW: ${{ secrets.NPM_TOKEN }}
         run: |
-          if [ -z "${{ secrets.NPM_TOKEN }}" ]; then
-            echo "::error::NPM_TOKEN is not set. Add it under Settings → Secrets → Actions."
+          if [ -z "$RAW" ]; then
+            echo "::error::NPM_TOKEN is not set. Add it under Settings → Secrets and variables → Actions."
             exit 1
           fi
+          LEN=$(printf '%s' "$RAW" | wc -c | tr -d ' ')
+          CLEAN=$(printf '%s' "$RAW" | tr -d '[:space:]' | wc -c | tr -d ' ')
+          echo "secret length: $LEN; length without whitespace: $CLEAN"
+          if [ "$LEN" -ne "$CLEAN" ]; then
+            echo "::error::NPM_TOKEN contains whitespace or a line break ($((LEN-CLEAN)) char(s)). Re-paste exactly one token, with no trailing newline."
+            exit 1
+          fi
+          case "$RAW" in
+            npm_*) ;;
+            *) echo "::error::NPM_TOKEN does not start with npm_ — is it a full access token?"; exit 1 ;;
+          esac
+          echo "Token shape looks valid."
 
       - name: Install
         run: npm ci
