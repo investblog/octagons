@@ -220,7 +220,9 @@
 				// edge. shadowBlur would look the same and cost roughly 3x the frame.
 				var NB = 5, buckets = [], b;
 				for (b = 0; b < NB; b++) buckets.push(null);
-				var ph = (t * 0.19 * sweep) % 1.6 - 0.3;
+				// `speed` is the global rate knob, so it must gate the lattice too —
+				// speed:0 has to freeze every mode, not just field
+				var ph = (t * 0.19 * sweep * speed) % 1.6 - 0.3;
 				for (i = 0; i < edges.length; i++) {
 					var e = edges[i];
 					var q = ((e.mx / W + e.my / H) / 2 - ph) / 0.16;

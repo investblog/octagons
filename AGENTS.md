@@ -48,8 +48,11 @@ Two modes: `field` (octagons at varying depth, drifting toward the viewer) and
   wide-dim-stroke-under-thin-bright-stroke pass instead.
 - **Line art has no hidden-surface removal.** Any 3D/extruded mode must cull edges
   facing away from the vanishing point, or struts show as scratches.
-- **fps measured while browser automation is capturing is not trustworthy.** Take the
-  reading from the page's own meter, unattended.
+- **Measure fps in ONE clean tab, with every other instance closed.** This cost real
+  time: leftover tabs each running a full-screen canvas (one of them wedged) dragged a
+  healthy build down to 0 fps, and the collapse was misread as a library bug that did not
+  exist. Close the tabs first, then measure — the same build reads 60 fps clean.
+  Automation capturing the screen also depresses the number; prefer the page's own meter.
 
 ## Self-configuration (adapt and explain)
 `~/.agents` provides a minimal shared baseline. Adapting to the project is standard work:

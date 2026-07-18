@@ -29,13 +29,17 @@ exists; an item is dropped when its plan moves to `plans/done/`.
 
 ## Known issues
 
-- **No README.** The repo has dev docs but no user-facing README.
 - **No tests.** `demo.html` is manual-only, so the push gate has nothing to run. Open
   question whether that is acceptable at this size.
-- **fps not measured cleanly.** Every figure so far was taken while browser automation
-  was capturing the screen, which throttles the page. Needs one unattended measurement.
-- **The tab-hang cause was never found.** A prototype wedged the renderer; a guard against
-  zero pitch and a loop cap were added, but the root cause is unconfirmed.
+
+### Resolved
+
+- **fps measured cleanly: 60.** Both the demo (three instances, one visible) and an
+  isolated lattice hold a steady 59–61 fps in a single clean tab.
+- **The "lattice hang" did not exist.** It was measurement contamination — several
+  leftover tabs each animating a full-screen canvas, one of them wedged. The same build
+  reads 60 fps once they are closed. No library fix was needed; see the measurement rule
+  in `../AGENTS.md`.
 
 ## Ideas, not scheduled
 
