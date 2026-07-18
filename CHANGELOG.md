@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.1.2 — 2026-07-19
+
+Fixes found by review of the 0.1.1 offline-rendering recipe. The first one made that
+recipe produce unusable footage, so this supersedes 0.1.1 for any video work.
+
+### Fixed
+- **`set({ seed })` did nothing** — `seed` was missing from the switch, so re-seeding a
+  running instance was silently ignored. It now rebuilds the field, and does so
+  identically to a fresh `init()` with that seed (verified: byte-identical canvases).
+- **The alpha recipe baked a vignette into the alpha channel.** With `background: null`
+  the canvas is cleared to transparent, but `paintVignette()` then filled black at
+  partial alpha across it. Measured: the corner pixel came out at alpha 79/255 — a 31%
+  black wash that composites over whatever the clip is laid on. The documented recipe now
+  sets `vignette: 0`, which belongs with `background: null`.
+
+### Docs
+- README states that `step()` bypasses the off-screen/hidden-tab sleeping described under
+  Performance. Headless pages are usually `document.hidden`, so that section otherwise
+  reads as a warning against the very thing offline rendering does.
+- Playwright screenshots need `omitBackground: true`, or a transparent canvas still comes
+  out on opaque white. PNG only.
+- `seed` marked as settable live.
+
 ## 0.1.1 — 2026-07-19
 
 Adds what offline/video rendering needs. No breaking changes; defaults are unchanged.

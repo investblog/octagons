@@ -118,6 +118,7 @@ the browser's. Two options cover it:
 var og = Octagons.init('.bg', {
   seed: 42,             // same seed + same dt sequence => identical frames
   background: null,     // transparent canvas, so the PNGs carry alpha
+  vignette: 0,          // MUST be 0 with a transparent canvas — see below
   parallax: false,      // no pointer input when nothing is pointing
   autoplay: false
 });
@@ -129,7 +130,21 @@ for (var i = 0; i < 600; i++) {             // 10 s at 60 fps
 }
 ```
 
-Drive it from Playwright, screenshot each frame, and assemble:
+**`vignette: 0` is not optional here.** The vignette is drawn as black at partial alpha
+over the whole canvas. On an opaque background that is just a darkened edge; on a
+transparent one it bakes *into the alpha channel*, and the clip lands in the timeline
+with dirty grey corners over whatever is underneath. `background: null` and
+`vignette: 0` belong together.
+
+Drive it from Playwright, screenshot each frame — and pass `omitBackground`, or the
+screenshot gets an opaque white backdrop regardless of the transparent canvas:
+
+```js
+await page.locator('canvas').screenshot({ path: file, omitBackground: true });
+// omitBackground only has an effect for PNG
+```
+
+Then assemble:
 
 ```sh
 ffmpeg -framerate 60 -i frame_%04d.png -c:v prores_ks -profile:v 4444 -pix_fmt yuva444p10le out.mov
@@ -142,6 +157,12 @@ depth decreases each frame and octagons re-scatter when they pass the camera, so
 no closed form to seek to. Frames must be produced in order, from the start. That is fine
 for a sequence render; it does mean you cannot jump to second 37 without rendering the
 first 37, and you cannot split one clip across parallel workers.
+
+**Sleeping does not apply to `step()`.** The performance section below describes a loop
+that pauses off screen and on a hidden tab — which sounds alarming for headless rendering,
+where the page often *is* hidden. It does not apply: `step()` draws the frame directly and
+never consults that gating. Only the `requestAnimationFrame` loop is gated, and offline
+rendering does not use it. Call `stop()` first so the two clocks cannot both run.
 
 Verified rather than assumed: two runs with the same seed produce byte-identical canvases
 after 300 frames, well past the first respawns.
@@ -168,7 +189,7 @@ after 300 frames, well past the first respawns.
 | `halo` | `'#0c1330'` | both | Soft central glow. Pass `null` to disable |
 | `size` | `110` | both | Lattice pitch in px; scale factor for the field |
 | `count` | `90` | field | Number of octagons |
-| `seed` | *none* | field | Integer. Makes the scatter reproducible — see offline rendering |
+| `seed` | *none* | field | Integer. Makes the scatter reproducible — see offline rendering. Settable live; re-seeding rebuilds the field |
 | `speed` | `1` | both | Animation rate; `0` freezes it |
 | `weight` | `1` | both | Line thickness multiplier |
 | `glow` | `true` | both | Soft halo around bright edges |

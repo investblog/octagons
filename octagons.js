@@ -421,6 +421,9 @@
 						case 'halo': halo = v === null ? null : parseColor(v); break;
 						case 'size': size = v; break;
 						case 'count': count = v; seedField(); break;
+						// seedField() restarts the stream from the seed, so re-seeding
+						// mid-flight is well defined rather than a desync
+						case 'seed': seed = v; seedField(); break;
 						case 'speed': speed = v; break;
 						case 'weight': weight = v; break;
 						case 'glow': glow = v; break;
