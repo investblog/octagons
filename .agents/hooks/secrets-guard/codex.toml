@@ -5,5 +5,5 @@ matcher = "Bash|apply_patch"
 
 [[hooks.PreToolUse.hooks]]
 type = "command"
-command = 'bash ".agents/hooks/secrets-guard/guard.sh" --codex'
+command = 'git -c "alias.agent-hook=!bash .agents/hooks/secrets-guard/guard.sh" agent-hook --codex; exit $LASTEXITCODE'
 statusMessage = "secrets-guard"

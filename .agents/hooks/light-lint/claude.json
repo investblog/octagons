@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.agents/hooks/light-lint/lint.sh\""
+            "command": "git -c \"alias.agent-hook=!bash .agents/hooks/light-lint/lint.sh\" agent-hook; exit $LASTEXITCODE"
           }
         ]
       }

@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"W:\\Program Files\\Git\\bin\\bash.exe\" \"$CLAUDE_PROJECT_DIR/.agents/hooks/secrets-guard/guard.sh\" --claude"
+            "command": "git -c \"alias.agent-hook=!bash .agents/hooks/secrets-guard/guard.sh\" agent-hook --claude; exit $LASTEXITCODE"
           }
         ]
       }
@@ -17,7 +17,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"W:\\Program Files\\Git\\bin\\bash.exe\" \"$CLAUDE_PROJECT_DIR/.agents/hooks/light-lint/lint.sh\""
+            "command": "git -c \"alias.agent-hook=!bash .agents/hooks/light-lint/lint.sh\" agent-hook; exit $LASTEXITCODE"
           }
         ]
       }

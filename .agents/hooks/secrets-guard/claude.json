@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR/.agents/hooks/secrets-guard/guard.sh\" --claude"
+            "command": "git -c \"alias.agent-hook=!bash .agents/hooks/secrets-guard/guard.sh\" agent-hook --claude; exit $LASTEXITCODE"
           }
         ]
       }

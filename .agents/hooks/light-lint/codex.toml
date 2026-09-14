@@ -5,5 +5,5 @@ matcher = "apply_patch"
 
 [[hooks.PostToolUse.hooks]]
 type = "command"
-command = 'bash ".agents/hooks/light-lint/lint.sh"'
+command = 'git -c "alias.agent-hook=!bash .agents/hooks/light-lint/lint.sh" agent-hook; exit $LASTEXITCODE'
 statusMessage = "light-lint"
