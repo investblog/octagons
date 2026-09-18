@@ -1,9 +1,0 @@
-# Merge into ./.codex/config.toml. Matcher = codex tool names that carry a path/command;
-# adjust to your codex version's tool names if they differ.
-[[hooks.PreToolUse]]
-matcher = "Bash|apply_patch"
-
-[[hooks.PreToolUse.hooks]]
-type = "command"
-command = 'git -c "alias.agent-hook=!bash .agents/hooks/secrets-guard/guard.sh" agent-hook --codex; exit $LASTEXITCODE'
-statusMessage = "secrets-guard"

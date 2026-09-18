@@ -1,6 +1,6 @@
 # Baseline .gitignore — bootstrap copies this to ./.gitignore at git init.
-# Extend per project for its stack (see the env-setup rule). Lock file in
-# .agents/generated/ IS committed (provenance) — do not ignore it.
+# Extend per project for its stack (see the env-setup rule). The agent's files
+# are not committed at all: this is a public repository (the block at the end).
 
 # secrets — never commit (templates like .env.example are kept)
 .env
@@ -41,5 +41,13 @@ context/attachments/
 # generated build output — rebuilt by `npm run build`, never committed (git-discipline)
 octagons.min.js
 
-# local agent anchor — symlink to AGENTS.md, not shipped
+# agent infrastructure — this is a public repository: it holds the product only. The agent's rules,
+# plans, hooks, settings and memory stay on the maintainer's machine (canon BOOTSTRAP step 5).
+.agents/
+.claude/
+.codex/
+.opencode/
+AGENTS.md
 CLAUDE.md
+opencode.json
+.mcp.json
