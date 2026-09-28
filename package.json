@@ -6,10 +6,14 @@
   "files": [
     "octagons.js",
     "octagons.min.js",
-    "CHANGELOG.md"
+    "CHANGELOG.md",
+    "cards/svg/",
+    "cards/README.md",
+    "cards/build.mjs"
   ],
   "scripts": {
     "build": "terser octagons.js --compress --mangle -o octagons.min.js",
+    "cards": "node cards/build.mjs",
     "size": "terser octagons.js --compress --mangle | gzip -9 | wc -c",
     "lint": "eslint .",
     "prepublishOnly": "npm run build"
@@ -30,7 +34,10 @@
     "vanilla-js",
     "hero-background",
     "background-animation",
-    "svg-pattern"
+    "svg-pattern",
+    "playing-cards",
+    "card-deck",
+    "svg"
   ],
   "author": "301st (https://301.st)",
   "license": "MIT",
@@ -41,6 +48,10 @@
   },
   "bugs": {
     "url": "https://github.com/investblog/octagons/issues"
+  },
+  "funding": {
+    "type": "sponsor",
+    "url": "https://oktagonbet.partners/"
   },
   "devDependencies": {
     "eslint": "^9.39.4",

@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OktagonBet deck</title>
+<style>
+	/* The site's theme tokens (oktagonbet.partners theme.css), so the themed cards can be
+	   checked here exactly as they will look there. */
+	:root[data-theme=light] { --bg: #fff; --bg-soft: #eceded; --bg-elevated: #f3f5f6; --text-main: #11171c; --border-strong: #11171c29; --primary: #06f; --primary-hover: #003d99; --accent-border: #9c7c00; --danger: #a33330; --success: #47730e; }
+	:root[data-theme=dark] { --bg: #232a31; --bg-soft: #11171c; --bg-elevated: #1f262c; --text-main: #e6e6e6; --border-strong: #ffffff24; --primary: #06f; --primary-hover: #0052cc; --accent-border: #fde74c; --danger: #e66a67; --success: #9bc53d; }
+	body { margin: 0; padding: 24px 16px; background: var(--bg); color: var(--text-main); font: 14px/1.4 system-ui, sans-serif; }
+	header { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 8px; }
+	h1 { font-size: 18px; margin: 0; flex: 1; }
+	h2 { font-size: 14px; margin: 24px 0 8px; }
+	button { font: inherit; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--bg-soft); color: inherit; cursor: pointer; }
+	.row { display: grid; grid-template-columns: repeat(13, minmax(0, 1fr)); gap: 12px; max-width: 1600px; }
+	@media (max-width: 900px) { .row { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+	figure { margin: 0; text-align: center; }
+	figure svg, figure img { width: 100%; height: auto; display: block; }
+	figcaption { font-size: 12px; opacity: .6; margin-top: 4px; }
+	.flip svg { transform: rotate(180deg); }
+</style>
+</head>
+<body>
+<header>
+	<h1>OktagonBet deck — 52 + 2 jokers + back</h1>
+	<button id="theme" type="button">Theme: light</button>
+</header>
+<p>Top: themed SVG inlined, following <code>data-theme</code>. Bottom: the static <code>light/</code> or <code>dark/</code> set as <code>&lt;img&gt;</code> — the two should match.</p>
+<div id="deck"></div>
+<h2>Static set as &lt;img&gt;</h2>
+<div class="row" id="static"></div>
+<script>
+	var suits = { S: 'Spades', H: 'Hearts', D: 'Diamonds', C: 'Clubs' };
+	var ranks = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+	var deck = document.getElementById('deck');
+	var sample = ['AS', 'KH', 'QD', 'JC', '10S', 'joker-red', 'joker-black', 'back'];
+
+	function row(title, items) {
+		var html = '<h2>' + title + '</h2><div class="row">';
+		items.forEach(function (it) {
+			html += '<figure' + (it.flip ? ' class="flip"' : '') + ' data-code="' + it.code + '"></figure>';
+		});
+		deck.insertAdjacentHTML('beforeend', html + '</div>');
+	}
+	Object.keys(suits).forEach(function (s) {
+		row(suits[s], ranks.map(function (r) { return { code: r + s }; }));
+	});
+	row('Jokers and back', [{ code: 'joker-red' }, { code: 'joker-black' }, { code: 'back' }, { code: 'back', flip: true }]);
+
+	// Inline the themed files so the page's tokens reach them.
+	deck.querySelectorAll('figure').forEach(function (f) {
+		var code = f.getAttribute('data-code');
+		fetch('svg/' + code + '.svg').then(function (r) { return r.text(); }).then(function (t) {
+			f.innerHTML = t + '<figcaption>' + code + (f.className ? ', rotated 180°' : '') + '</figcaption>';
+		});
+	});
+
+	function renderStatic(theme) {
+		document.getElementById('static').innerHTML = sample.map(function (c) {
+			return '<figure><img src="svg/' + theme + '/' + c + '.svg" alt="' + c + '"><figcaption>' + theme + '/' + c + '</figcaption></figure>';
+		}).join('');
+	}
+	var btn = document.getElementById('theme');
+	function setTheme(t) {
+		document.documentElement.setAttribute('data-theme', t);
+		btn.textContent = 'Theme: ' + t;
+		renderStatic(t);
+	}
+	btn.addEventListener('click', function () {
+		setTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+	});
+	setTheme('light');
+</script>
+</body>
+</html>
