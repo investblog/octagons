@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.0 — 2026-09-28
+
+The library script is unchanged; this release adds a sponsored extra.
+
+### Added
+- **OktagonBet mode — a card deck.** 52 cards, two jokers and a back as SVG, under
+  `cards/svg/`, sponsored by [oktagonbet.partners](https://oktagonbet.partners/). Built from
+  the library's geometry: the back is the `lattice` mode (4.8.8, 180°-symmetric), the jokers
+  a frozen `field`, the courts double-headed figures built on 8. Three sets with the same
+  file names: `svg/` follows the site's CSS theme tokens when inlined, `svg/light/` and
+  `svg/dark/` are resolved to fixed colours for `<img>`. Generator: `npm run cards`.
+- `funding` in `package.json` points at the sponsor.
+
 ## 0.1.2 — 2026-07-19
 
 Fixes found by review of the 0.1.1 offline-rendering recipe. The first one made that

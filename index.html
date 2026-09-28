@@ -215,6 +215,16 @@
   .credit a:hover{background:var(--primary-soft)}
   .credit svg{width:15px;height:15px;display:block;flex:0 0 auto}
   .credit .sep{opacity:.45}
+  /* OktagonBet deck: the page's theme picks the fixed light/ or dark/ set — <img> cannot
+     see this page's CSS tokens. */
+  .deck{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin:28px 0}
+  @media (max-width:700px){.deck{grid-template-columns:repeat(3,minmax(0,1fr))}}
+  .deck img{width:100%;height:auto;display:block;filter:drop-shadow(0 4px 10px rgba(0,0,0,.25))}
+  .deck .l,:root[data-theme="light"] .deck .d{display:none}
+  :root[data-theme="light"] .deck .l{display:block}
+  .sponsor{font-size:var(--fs-sm);color:var(--text-subtle);margin-top:18px}
+  .sponsor a{color:var(--primary-hover)}
+  .sponsor .sep{opacity:.45}
 
   @media(max-width:900px){#panel{display:none} nav a.item span{display:none}}
   /* 301-ui handles reduced motion only per-component and its own docs flag that as
@@ -307,6 +317,28 @@
       <div><i data-p="34" data-o="0.13" data-n="octagon"></i><span data-i18n="pat.sw3">34px · octagon nodes</span></div>
       <div><i data-p="52" data-o="0.15" data-n="both"></i><span data-i18n="pat.sw4">52px · both</span></div>
     </div>
+  </div>
+</section>
+
+<section id="cards" style="min-height:auto;padding:96px 0">
+  <div class="inner" style="max-width:980px;padding-top:48px">
+    <span class="eyebrow" data-i18n="cards.eyebrow">OktagonBet mode · sponsored</span>
+    <h2 data-i18n="cards.h2">A card deck, from the same octagons.</h2>
+    <p data-i18n-html="cards.p">The back is the <code>lattice</code>, the jokers are a frozen <code>field</code>,
+       and the courts are built on eight: octagon heads, octagram halos, an eight-petal flower.
+       54 cards as SVG, in <code>octagons/cards/svg/</code>.</p>
+    <div class="deck">
+      <img class="d" src="cards/svg/dark/back.svg" alt="back"><img class="l" src="cards/svg/light/back.svg" alt="back">
+      <img class="d" src="cards/svg/dark/AS.svg" alt="AS"><img class="l" src="cards/svg/light/AS.svg" alt="AS">
+      <img class="d" src="cards/svg/dark/KH.svg" alt="KH"><img class="l" src="cards/svg/light/KH.svg" alt="KH">
+      <img class="d" src="cards/svg/dark/QD.svg" alt="QD"><img class="l" src="cards/svg/light/QD.svg" alt="QD">
+      <img class="d" src="cards/svg/dark/JC.svg" alt="JC"><img class="l" src="cards/svg/light/JC.svg" alt="JC">
+      <img class="d" src="cards/svg/dark/joker-red.svg" alt="joker"><img class="l" src="cards/svg/light/joker-red.svg" alt="joker">
+    </div>
+    <a class="btn btn--primary" href="cards/" data-i18n="cards.cta">See the whole deck</a>
+    <p class="sponsor"><span data-i18n="cards.sponsor">Sponsored by</span>
+      <a href="https://oktagonbet.partners/" target="_blank" rel="noopener sponsored">oktagonbet.partners</a>
+      <span class="sep">·</span> <span data-i18n="cards.age">18+ · Play responsibly</span></p>
   </div>
 </section>
 
@@ -447,7 +479,7 @@ $('theme').addEventListener('click', function(){
 
 // ── language ─────────────────────────────────────────────
 // Mirrors 301-ui src/i18n: `data-i18n` sets textContent, `data-i18n-html` sets
-// innerHTML (only for the three strings carrying an inline <code>), `data-i18n-aria`
+// innerHTML (only for the strings carrying an inline <code>), `data-i18n-aria`
 // sets aria-label, and the choice persists to localStorage['locale']. The switcher
 // markup contract is dom.ts's: trigger with flag + label, [data-lang-menu], the
 // current item marked `is-active`.
@@ -480,6 +512,14 @@ var I18N = {
     'pat.note':      'Taj blok koda je upravo koristi. Ništa se ne izvršava — to je jedna pločica koja se ponavlja.',
     'pat.sw3':       '34px · čvorovi osmouglovi',
     'pat.sw4':       '52px · oba',
+    'cards.eyebrow': 'OktagonBet režim · sponzorisano',
+    'cards.h2':      'Špil karata, od istih osmouglova.',
+    'cards.p':       'Poleđina je <code>lattice</code>, džokeri su zamrznuti <code>field</code>, ' +
+                     'a figure su građene na osmici: osmougaone glave, oreoli od osmokrake zvezde, ' +
+                     'cvet sa osam latica. 54 karte kao SVG, u <code>octagons/cards/svg/</code>.',
+    'cards.cta':     'Pogledaj ceo špil',
+    'cards.sponsor': 'Sponzor:',
+    'cards.age':     '18+ · Igrajte odgovorno',
     'use.eyebrow':   'upotreba',
     'use.h2':        'Jedan poziv.',
     'use.p':         'Pauzira kada je kartica sakrivena. Ograničava device pixel ratio na 2. ' +

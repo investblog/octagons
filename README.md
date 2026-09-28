@@ -3,7 +3,9 @@
 Animated backgrounds built from **regular** octagons. Line art on canvas — the colour
 gradient runs along the edges, nothing is ever filled. Zero dependencies, ~3.1 KB gzipped.
 
-Two modes: octagons drifting toward the viewer in depth, or a static lattice.
+Two modes: octagons drifting toward the viewer in depth, or a static lattice. Plus a
+sponsored **OktagonBet mode**: a 54-card deck drawn from the same octagons, as SVG
+([below](#oktagonbet-mode-a-card-deck)).
 
 [![npm](https://img.shields.io/npm/v/octagons.svg)](https://www.npmjs.com/package/octagons)
 [![license](https://img.shields.io/npm/l/octagons.svg)](LICENSE)
@@ -271,6 +273,45 @@ octagons is part of a small family of zero-dependency polygon backgrounds, one p
 - **8 — octagons** (this library): octagon line art in pseudo-3D depth
 
 Same API spirit everywhere: one global, `init()` / `pattern()`, zero dependencies, a few KB each.
+
+## OktagonBet mode: a card deck
+
+A sponsored extra, made for [oktagonbet.partners](https://oktagonbet.partners/): 52 cards,
+two jokers and a back, all built from the library's own geometry. It is static SVG — the
+library script is not involved and not changed.
+
+- **The back is the `lattice` mode**: the 4.8.8 tiling, one octagon centred on the card, so
+  the back is 180°-symmetric and does not give away which way up a card lies.
+- **The jokers are a frozen `field`**: rings shrinking and turning toward a vanishing point.
+- **The courts are built on 8**: octagon heads, an octagram halo, an eight-petal flower for
+  the queen, an octagram sceptre for the king. Ranks are drawn in octagonal lettering, as
+  paths, so no font is needed.
+
+**[See the whole deck →](https://investblog.github.io/octagons/cards/)**
+
+```sh
+npm install octagons
+# node_modules/octagons/cards/svg/        themed: the site's CSS tokens, for inline <svg>
+# node_modules/octagons/cards/svg/light/  fixed colours, light theme, for <img>
+# node_modules/octagons/cards/svg/dark/   fixed colours, dark theme
+```
+
+```html
+<img src="https://cdn.jsdelivr.net/npm/octagons@0.2/cards/svg/dark/QH.svg" alt="Queen of hearts">
+```
+
+File names are `<rank><suit>.svg` (`AS`, `10H`, `QC`), `joker-red`, `joker-black`, `back`;
+`cards/svg/manifest.json` lists them. The themed set reads `--bg`, `--primary`,
+`--accent-border`, `--danger` and the rest of the oktagonbet.partners theme tokens, so inline
+cards follow the site's light/dark switch. Details and the generator:
+[cards/README.md](cards/README.md).
+
+## Sponsor
+
+The OktagonBet mode is sponsored by **[oktagonbet.partners](https://oktagonbet.partners/)** —
+the OktagonBet affiliate program.
+
+18+ · Play responsibly.
 
 ## Credits
 
