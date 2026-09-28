@@ -18,13 +18,11 @@ exists; an item is dropped when its plan moves to `plans/done/`.
 
 ## Open
 
-- **Trusted Publisher is still not configured**, three releases in. 0.1.0, 0.1.1 and
-  0.1.2 all went out through the token bootstrap, so none carry provenance, every tag
-  leaves a failed `release.yml` run behind, and the `NPM_TOKEN` secret is still sitting
-  in the repository. Full steps in [decisions/003](decisions/003-publishing-over-oidc.md).
-  This is the one open item that costs something every release.
-- **Delete `bootstrap-publish.yml`** once the above works — it stops functioning anyway
-  if token publishing is disallowed.
+- **Retire the npm token** (maintainer, by hand). Trusted Publishing works — 0.2.0 and
+  0.2.1 went out from `release.yml` over OIDC with provenance, and `bootstrap-publish.yml`
+  is deleted — but the `NPM_TOKEN` repository secret is still there and no workflow reads
+  it. Delete it (repo Settings → Secrets), revoke the token on npmjs.com, and optionally
+  set *disallow tokens* under Publishing access. See [decisions/003](decisions/003-publishing-over-oidc.md).
 - **No tests, and now an API that wants them.** `seed` + `step(dt)` make the field
   deterministic, which means a headless frame-hash test is finally possible: render N
   frames at a fixed seed, compare a hash against a stored value. That would have caught

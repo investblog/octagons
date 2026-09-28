@@ -37,7 +37,15 @@ workstation: write-only, scoped to one repository, and deletable the moment it i
 - the `NPM_TOKEN` secret is still present, which is the thing this design existed to
   avoid.
 
-## Remaining work
+## Status as of 0.2.1
+
+**Trusted Publishing works.** 0.2.0 and 0.2.1 were published by `release.yml` on the tag
+push, over OIDC, with a provenance attestation (SLSA v1) — no secret involved.
+`bootstrap-publish.yml` has been deleted. Steps 1 and 4 below are done; what remains is the
+maintainer's, on npmjs.com and in the repository settings: delete the unused `NPM_TOKEN`
+secret, revoke the token, and optionally disallow token publishing (steps 2–3).
+
+## Remaining work (as written at 0.1.2)
 
 1. npmjs.com → `octagons` → Settings → Trusted Publisher → GitHub Actions →
    `investblog` / `octagons` / `release.yml` (filename only, not a path), Allowed
