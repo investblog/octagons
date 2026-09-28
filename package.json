@@ -1,6 +1,6 @@
 {
   "name": "octagons",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Animated backgrounds built from regular octagons. Line art, zero dependencies.",
   "main": "octagons.js",
   "files": [
