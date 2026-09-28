@@ -20,21 +20,33 @@ Three sets with the same file names:
 
 | Folder | Colours | Use |
 |---|---|---|
-| `svg/` | the site's CSS tokens | **inline `<svg>`** in the page — follows `data-theme` |
+| `svg/` + `svg/okt-cards.css` | the site's CSS tokens | **inline `<svg>`** in the page — follows `data-theme` |
 | `svg/light/` | fixed, light theme | `<img>`, PNG, anywhere without the site's CSS |
 | `svg/dark/` | fixed, dark theme | same, dark |
 
 - `<rank><suit>.svg` — rank `A 2–10 J Q K`, suit `S H D C` (`AS.svg`, `10H.svg`, `QC.svg`).
 - `joker-red.svg`, `joker-black.svg`, `back.svg`.
-- `svg/manifest.json` — the variant folders and code → file name.
+- `svg/manifest.json` — the variant folders, the stylesheet and code → file name.
 
-With `<img>`, CSS from the page cannot reach the file, so the page picks the folder:
-`svg/${theme}/QH.svg`. A themed file used as `<img>` still works: it falls back to the
-token values and follows the system colour scheme, not the site's switch.
+**Inline use** — link the stylesheet once, then inline the themed files:
 
-Inline use: every id inside a card is prefixed with its code (`okt-QH-g`), so any number of
-cards can share a page. The root has `class="okt-card"`, and the card's `<style>` defines its
-`--okt-*` variables only on that class.
+```html
+<link rel="stylesheet" href="/cards/okt-cards.css">  <!-- copied from octagons/cards/svg/ -->
+```
+
+A themed card has **no `<style>` element and no `style=""` attribute**, so it works under a
+strict CSP (`style-src 'self'`), which blocks both inside inline SVG. Each colour is a plain
+presentation attribute (the light-theme value) plus a role class — `okt-f-ink` (fill),
+`okt-s-gold` (stroke), `okt-c-blue` (stop-color). `okt-cards.css` maps those classes to the
+page's tokens (`--bg`, `--primary`, `--danger`, …), so the site's `:root[data-theme]` switch
+drives the cards; it falls back to the token values, following the system scheme, only where a
+token is missing. Without the stylesheet the cards still render, in the light colours.
+
+Every id inside a card is prefixed with its code (`okt-QH-g`), so any number of cards can
+share a page. The root has `class="okt-card"`.
+
+**`<img>` use** — CSS from the page cannot reach an image, so the page picks the folder:
+`svg/${theme}/QH.svg`.
 
 All cards share `viewBox="0 0 630 880"` (poker size 63 × 88 mm, 1 unit = 0.1 mm), so they
 are interchangeable in any layout. The generator is deterministic: re-running it gives

@@ -291,7 +291,7 @@ library script is not involved and not changed.
 
 ```sh
 npm install octagons
-# node_modules/octagons/cards/svg/        themed: the site's CSS tokens, for inline <svg>
+# node_modules/octagons/cards/svg/        themed, for inline <svg>, with svg/okt-cards.css
 # node_modules/octagons/cards/svg/light/  fixed colours, light theme, for <img>
 # node_modules/octagons/cards/svg/dark/   fixed colours, dark theme
 ```
@@ -301,10 +301,11 @@ npm install octagons
 ```
 
 File names are `<rank><suit>.svg` (`AS`, `10H`, `QC`), `joker-red`, `joker-black`, `back`;
-`cards/svg/manifest.json` lists them. The themed set reads `--bg`, `--primary`,
-`--accent-border`, `--danger` and the rest of the oktagonbet.partners theme tokens, so inline
-cards follow the site's light/dark switch. Details and the generator:
-[cards/README.md](cards/README.md).
+`cards/svg/manifest.json` lists them. Inline themed cards take their colours from
+`okt-cards.css`, which reads `--bg`, `--primary`, `--accent-border`, `--danger` and the rest of
+the oktagonbet.partners theme tokens, so they follow the site's light/dark switch. They carry
+no inline styles, so a strict CSP (`style-src 'self'`) does not block them. Details and the
+generator: [cards/README.md](cards/README.md).
 
 ## Sponsor
 

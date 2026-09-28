@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.2.1 — 2026-09-28
+
+Fixes found by embedding the 0.2.0 deck on oktagonbet.partners. The library script is
+unchanged.
+
+### Fixed
+- **Inline themed cards lost every colour under a strict CSP.** The themed set carried a
+  `<style>` element and `style=""` attributes; `style-src 'self'` blocks both inside inline
+  SVG, and each card rendered as a black rectangle (reproduced under that CSP: violations of
+  `style-src-elem` and `style-src-attr`, fills `rgb(0,0,0)`). Themed cards now use plain
+  presentation attributes (the light colours) plus role classes, and a separate stylesheet,
+  `cards/svg/okt-cards.css`, maps the classes to the site's tokens. Verified under the same
+  CSP: no violations, and all 55 cards match the fixed `light/` and `dark/` sets colour for
+  colour in both themes.
+- **Jokers and the back had no card edge.** On a page whose background is `--bg-soft` —
+  the same colour as their panel — the card outline vanished. They now carry the same
+  `--border-strong` edge as the other 52.
+
 ## 0.2.0 — 2026-09-28
 
 The library script is unchanged; this release adds a sponsored extra.

@@ -4,6 +4,7 @@
 		"light": "light/",
 		"dark": "dark/"
 	},
+	"stylesheet": "okt-cards.css",
 	"cards": {
 		"AS": "AS.svg",
 		"2S": "2S.svg",

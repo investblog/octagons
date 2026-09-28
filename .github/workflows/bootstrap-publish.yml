@@ -74,7 +74,7 @@ jobs:
           npm pack --silent > /dev/null
           TARBALL="$(ls octagons-*.tgz)"
           tar -tzf "$TARBALL" | sed 's|^package/||' | sort
-          for f in octagons.js octagons.min.js package.json README.md LICENSE cards/svg/manifest.json cards/svg/back.svg cards/svg/light/back.svg cards/svg/dark/back.svg; do
+          for f in octagons.js octagons.min.js package.json README.md LICENSE cards/svg/manifest.json cards/svg/okt-cards.css cards/svg/back.svg cards/svg/light/back.svg cards/svg/dark/back.svg; do
             tar -tzf "$TARBALL" | grep -qx "package/$f" || {
               echo "::error::$f missing from the published tarball"; exit 1; }
           done
