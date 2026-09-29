@@ -76,7 +76,10 @@ a triangle mesh you cannot jitter positions.
 |---|---|
 | `octagons.js` | The source. The only file you edit. |
 | `octagons.min.js` | **Generated** by `npm run build`, and **gitignored** — it exists only locally and at publish time. |
-| `index.html` | Three sections; live controls drive the hero instance. |
+| `index.html` | Hero, lattice, pattern, OktagonBet deck, usage; live controls drive the hero instance. |
+| `cards/build.mjs` | Generator of the OktagonBet deck — the only deck file you edit. |
+| `cards/svg/` | **Generated** deck, **committed** (npm and Pages serve the files); CI fails if it drifts from the generator. |
+| `cards/index.html` | Deck preview with a light/dark switch; the verification surface for cards. |
 
 ## Determinism and time
 
@@ -98,6 +101,30 @@ or out-of-order rendering is actually needed.
 The lattice mode was already deterministic: bonds come from `hash(i, j, d)`, never from
 `Math.random`.
 
+## OktagonBet deck (`cards/`)
+
+A sponsored extra since 0.2.0: 54 cards + back as static SVG, for oktagonbet.partners.
+**It is not a mode of `octagons.js`** — the script is untouched, and the "OktagonBet mode"
+name is a docs label only (settled with the owner on 2026-09-28 after a misreading nearly
+put a `mode: 'cards'` into the library).
+
+Load-bearing facts:
+
+- **Colours are roles bound to the site's theme tokens** (`ROLES` in `build.mjs`), each
+  with its light and dark value. Three sets from one description: `svg/` (themed, role
+  classes), `svg/light/`, `svg/dark/` (resolved, for `<img>`).
+- **Themed cards must carry no inline styles.** 0.2.0 used a `<style>` element and
+  `style=""`; the site's CSP (`style-src 'self'`) blocks both inside inline SVG and every
+  card rendered black. Since 0.2.1 colours are presentation attributes plus role classes,
+  mapped by the separate `svg/okt-cards.css`. The generator throws if a themed card
+  contains `<style`, `style="` or an unresolved role marker.
+- **The back must stay 180°-symmetric.** Checked by pixel-diffing a render against itself
+  rotated (max channel delta 1). Rounding the brand mark's scale to 2 decimals, or
+  centring it on its 116-box instead of its geometric centre (57.714), was enough to break it.
+- **Deterministic output** — CI re-runs the generator and fails on `git diff cards/svg`.
+- **Sponsor rule:** partner materials carry "18+ · Play responsibly" (README Sponsor block,
+  demo, `cards/README.md`).
+
 ## Commands
 
 | Command | What |
@@ -105,6 +132,7 @@ The lattice mode was already deterministic: bonds come from `hash(i, j, d)`, nev
 | `npm run lint` | ESLint (also runs in the pre-commit gate) |
 | `npm run build` | Minify → `octagons.min.js` |
 | `npm run size` | gzip size of the minified output |
+| `npm run cards` | Regenerate the deck → `cards/svg/` (commit the result) |
 
 Serve locally and **look at it** — this is a visual library and lint proves nothing:
 `python -m http.server 5173` then open `index.html`.
